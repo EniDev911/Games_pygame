@@ -1,4 +1,5 @@
 import pygame
+import random
 
 # Crear una clase que maneje la noción de monstruo en nuestro juego
 class Monster(pygame.sprite.Sprite):
@@ -12,13 +13,20 @@ class Monster(pygame.sprite.Sprite):
         self.attack = 0.3
         self.image = pygame.image.load('assets/mummy.png')
         self.rect = self.image.get_rect()
-        self.rect.x = 1000
+        self.rect.x = 1000 + random.randint(0, 300)
         self.rect.y = 500
-        self.velocity = 2
+        self.velocity = random.randint(1, 3)
 
 
     def damage(self, amount):
-        pass
+        # Infligir daño
+        self.health -= amount
+        # Comprobar si su nuevo número de vida es menor o igual a 0
+        if self.health <= 0:
+            # Reaparecer como un nuevo monster
+            self.rect.x = 1000 + random.randint(0, 300)
+            self.health = self.max_health
+            self.velocity = random.randint(1,3)
 
     def update_health_bar(self, surface):
         # definir un color para nuestro indicador de vida (verde claro)
@@ -39,4 +47,8 @@ class Monster(pygame.sprite.Sprite):
         if not self.game.check_collision(self, self.game.all_players):
             self.rect.x -= self.velocity
 
+        # Si el monstruo choca con el jugador
+        else:
+        # Infligir daño (al jugador)
+            self.game.player.damage(self.attack)
 
