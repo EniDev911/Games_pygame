@@ -12,7 +12,7 @@ class Game:
         self.player = Player(self)
         self.all_players.add(self.player)
         # generar eventos
-        self.comet_event = CometFallEvent()
+        self.comet_event = CometFallEvent(self)
         # Grupo de monstruos
         self.all_monsters = pygame.sprite.Group()
         self.pressed = {}
@@ -27,7 +27,9 @@ class Game:
         # reiniciar el juego, eliminar monstruos, reiniciar el jugador a 100
         # puntos de salud, juego en espera
         self.all_monsters = pygame.sprite.Group()
+        self.comet_event.all_comets = pygame.sprite.Group()
         self.player.health = self.player.max_health
+        self.comet_event.reset_percent()
         self.is_playing = False
 
 

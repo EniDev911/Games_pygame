@@ -3,9 +3,11 @@ from commet import Commet
 
 class CometFallEvent:
     # AL cargar crear un contador
-    def __init__(self):
+    def __init__(self, game):
         self.percent = 0
-        self.percent_speed = 50
+        self.percent_speed = 10
+        self.game = game
+        self.fall_mode = False
 
         # Definir el grupo de cometas
         self.all_comets = pygame.sprite.Group()
@@ -20,22 +22,22 @@ class CometFallEvent:
         return self.percent >= 100
 
     def meteor_fall(self):
-        # Apareciendo las bolas de fuego
-        self.all_comets.add(Commet())
+        # bucle para la aparición de las bolas de fuego
+        for i in range(1, 10):
+            # Apareciendo las bolas de fuego
+            self.all_comets.add(Commet(self))
 
     def attempt_fall(self):
-        if self.is_full_loaded():
+        if self.is_full_loaded() and len(self.game.all_monsters) == 0:
             print('Comienzan los cometas')
             self.meteor_fall()
-            self.reset_percent()
+            self.fall_mode = True # Activamos el evento
 
 
     def update_bar(self, surface):
         # agregar porcentaje a la barra
         self.add_percent()
 
-        # Aparecer la lluvia de cometas
-        self.attempt_fall()
 
         # barra negra (en el fondo)
         pygame.draw.rect(surface, (0,0,0), [
